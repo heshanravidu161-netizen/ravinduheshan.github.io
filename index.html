@@ -220,29 +220,21 @@
 
   /* ---------- software / tools ---------- */
   .software-grid{
-    display:grid; grid-template-columns:repeat(4,1fr); gap:16px;
+    display:flex; flex-wrap:wrap; gap:12px; justify-content:center;
   }
-  @media (max-width:760px){ .software-grid{grid-template-columns:repeat(2,1fr);} }
   .software-tile{
-    display:flex; flex-direction:column; align-items:center; gap:12px;
-    padding:26px 14px; border-radius:16px;
+    display:inline-flex; align-items:center; justify-content:center;
+    padding:12px 20px; border-radius:12px;
     background:var(--glass); border:1px solid var(--glass-border);
-    backdrop-filter:blur(18px) saturate(160%); -webkit-backdrop-filter:blur(18px) saturate(160%);
-    transition:background .2s ease, transform .2s ease, box-shadow .2s ease;
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    transition:background .2s ease, border-color .2s ease, transform .15s ease;
+    font-size:14px; font-weight:500; color:var(--ink);
+    min-width:120px; text-align:center;
   }
   .software-tile:hover{
-    background:var(--glass-strong); transform:translateY(-3px);
-    box-shadow:0 20px 40px -24px rgba(245,197,24,0.4);
+    background:var(--glass-strong); border-color:var(--amber-deep);
+    transform:translateY(-2px);
   }
-  .software-tile img{width:38px; height:38px; object-fit:contain;}
-  .software-tile span{font-size:13.5px; font-weight:500; text-align:center; color:var(--ink);}
-  .icon-badge{
-    width:44px; height:44px; border-radius:12px;
-    display:flex; align-items:center; justify-content:center;
-    font-family:'Inter', sans-serif; font-weight:700; font-size:14px;
-    border:1px solid currentColor;
-  }
-  .icon-emoji{font-size:26px; line-height:1;}
 
   /* ---------- contact ---------- */
   #contact{
@@ -462,46 +454,14 @@
       <p>Creative software from the printing side, and the operating systems I work across day to day.</p>
     </div>
     <div class="software-grid">
-      <div class="software-tile">
-        <img src="https://www.adobe.com/cc-shared/assets/img/product-icons/svg/photoshop-40.svg" alt="Adobe Photoshop" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="icon-badge" style="display:none; background:rgba(49,168,255,0.14); color:#31A8FF;">Ps</div>
-        <span>Adobe Photoshop</span>
-      </div>
-      <div class="software-tile">
-        <img src="https://www.adobe.com/cc-shared/assets/img/product-icons/svg/illustrator-40.svg" alt="Adobe Illustrator" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="icon-badge" style="display:none; background:rgba(255,154,0,0.14); color:#FF9A00;">Ai</div>
-        <span>Adobe Illustrator</span>
-      </div>
-      <div class="software-tile">
-        <img src="https://www.adobe.com/cc-shared/assets/img/product-icons/svg/audition.svg" alt="Adobe Audition" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="icon-badge" style="display:none; background:rgba(145,99,235,0.14); color:#9163EB;">Au</div>
-        <span>Adobe Audition</span>
-      </div>
-      <div class="software-tile">
-        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Microsoft_Office_2019_-_2024_logo.svg" alt="Microsoft Office" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-        <div class="icon-badge" style="display:none; background:rgba(216,59,1,0.14); color:#EB6A2E; font-size:12px;">Office</div>
-        <span>Microsoft Office</span>
-      </div>
-      <div class="software-tile">
-        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Apple_logo_black.svg" alt="macOS" style="filter:invert(0.9);" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
-        <span class="icon-emoji" style="display:none;">🍎</span>
-        <span>macOS</span>
-      </div>
-      <div class="software-tile">
-        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Windows_logo_-_2021.svg" alt="Windows" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
-        <span class="icon-emoji" style="display:none;">🪟</span>
-        <span>Windows</span>
-      </div>
-      <div class="software-tile">
-        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Tux.svg" alt="Linux" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
-        <span class="icon-emoji" style="display:none;">🐧</span>
-        <span>Linux</span>
-      </div>
-      <div class="software-tile">
-        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kali-dragon-icon.svg" alt="Kali Linux" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
-        <span class="icon-emoji" style="display:none;">🐉</span>
-        <span>Kali Linux</span>
-      </div>
+      <div class="software-tile">Adobe Photoshop</div>
+      <div class="software-tile">Adobe Illustrator</div>
+      <div class="software-tile">Adobe Audition</div>
+      <div class="software-tile">Microsoft Office</div>
+      <div class="software-tile">macOS</div>
+      <div class="software-tile">Windows</div>
+      <div class="software-tile">Linux</div>
+      <div class="software-tile">Kali Linux</div>
     </div>
   </div>
 </section>
