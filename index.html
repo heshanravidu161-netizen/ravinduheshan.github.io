@@ -1,0 +1,633 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ravindu Heshan — Computer Science &amp; Cyber Security</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ink:#F3F0E6;
+    --on-amber:#15171B;
+    --paper:#0B0D12;
+    --paper-alt:#14161C;
+    --line: rgba(255,255,255,0.10);
+    --line-strong: rgba(255,255,255,0.20);
+    --muted:#9CA0AA;
+    --amber:#F5C518;
+    --amber-soft: rgba(245,197,24,0.16);
+    --amber-deep:#FFD84D;
+    --glass: rgba(255,255,255,0.06);
+    --glass-strong: rgba(255,255,255,0.12);
+    --glass-border: rgba(255,255,255,0.14);
+    --max: 1040px;
+  }
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  @media (prefers-reduced-motion: reduce){
+    html{scroll-behavior:auto;}
+    *{animation-duration:0.001ms !important; animation-iteration-count:1 !important; transition-duration:0.001ms !important;}
+  }
+  body{
+    margin:0; background:var(--paper); color:var(--ink);
+    font-family:'Inter', sans-serif; font-size:16px; line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    position:relative;
+  }
+  /* ambient yellow glow the sky the glass panels sit on */
+  body::before{
+    content:""; position:fixed; inset:0; z-index:-1; pointer-events:none;
+    background:
+      radial-gradient(560px circle at 12% 8%, rgba(245,197,24,0.35), transparent 60%),
+      radial-gradient(620px circle at 88% 6%, rgba(245,197,24,0.22), transparent 55%),
+      radial-gradient(500px circle at 50% 40%, rgba(245,197,24,0.14), transparent 60%),
+      radial-gradient(700px circle at 20% 85%, rgba(245,197,24,0.2), transparent 55%),
+      radial-gradient(600px circle at 90% 95%, rgba(245,197,24,0.18), transparent 55%);
+  }
+  h1,h2,h3{ font-family:'Inter', sans-serif; letter-spacing:-0.02em; margin:0; color:var(--ink); }
+  a{color:inherit;}
+  ::selection{background:var(--amber); color:var(--on-amber);}
+  :focus-visible{outline:2px solid var(--amber); outline-offset:3px;}
+  .mono{font-family:'IBM Plex Mono', monospace;}
+
+  .wrap{max-width:var(--max); margin:0 auto; padding:0 28px;}
+  section{padding:88px 0;}
+  @media (max-width:640px){ section{padding:56px 0;} .wrap{padding:0 20px;} }
+
+  /* ---------- scroll progress ---------- */
+  #progressBar{position:fixed; top:0; left:0; height:3px; width:0%; background:var(--amber); z-index:70; transition:width .1s linear;}
+
+  /* ---------- eyebrow pill ---------- */
+  .pill{
+    display:inline-flex; align-items:center; gap:8px;
+    font-size:13px; font-weight:500; color:var(--ink);
+    border:1px solid var(--glass-border); border-radius:999px;
+    padding:6px 14px; background:var(--glass);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    box-shadow:0 8px 24px -16px rgba(185,143,0,0.4);
+  }
+  .pill .dot{width:6px; height:6px; border-radius:50%; background:var(--amber-deep);}
+  .pill.on-dark{background:rgba(255,255,255,0.1); border-color:rgba(255,255,255,0.22); color:#fff; box-shadow:none;}
+  .pill.on-dark .dot{background:var(--amber);}
+
+  /* ---------- nav ---------- */
+  header.nav{
+    position:sticky; top:0; z-index:60; background:rgba(11,13,18,0.72);
+    backdrop-filter:blur(16px) saturate(160%); -webkit-backdrop-filter:blur(16px) saturate(160%);
+    border-bottom:1px solid var(--glass-border);
+  }
+  .nav-inner{max-width:var(--max); margin:0 auto; padding:18px 28px; display:flex; align-items:center; justify-content:space-between;}
+  .nav-mark{font-weight:700; font-size:15.5px; letter-spacing:-0.01em; display:flex; align-items:center; gap:8px;}
+  .nav-mark .dot{width:7px; height:7px; border-radius:50%; background:var(--amber); display:inline-block;}
+  .nav-links{display:flex; align-items:center; gap:30px; list-style:none; margin:0; padding:0; font-size:14.5px;}
+  .nav-links a{text-decoration:none; color:var(--muted); transition:color .2s ease;}
+  .nav-links a:hover, .nav-links a.active{color:var(--ink);}
+  .nav-cta{
+    font-size:14px; font-weight:700; background:var(--amber); color:var(--on-amber);
+    padding:10px 18px; border-radius:999px; text-decoration:none; transition:background .2s ease, transform .15s ease;
+  }
+  .nav-cta:hover{background:#FFD84D; transform:translateY(-1px);}
+  @media (max-width:760px){ .nav-links a:not(.nav-cta){display:none;} }
+
+  /* ---------- hero ---------- */
+  .hero{padding:88px 0 64px; text-align:center;}
+  .hero .wrap{display:flex; flex-direction:column; align-items:center;}
+  .hero h1{
+    font-size:clamp(36px, 6vw, 60px); font-weight:800; line-height:1.06;
+    margin-top:0; max-width:15ch;
+  }
+  .hero h1 em{font-style:normal; color:var(--amber);}
+  .hero .sub{
+    margin-top:20px; max-width:56ch; color:var(--muted); font-size:17px;
+  }
+  .hero-cta{margin-top:32px; display:flex; gap:14px; flex-wrap:wrap; justify-content:center;}
+  .btn{
+    font-family:'Inter', sans-serif; font-size:15px; font-weight:600;
+    padding:13px 26px; border-radius:999px; text-decoration:none;
+    display:inline-flex; align-items:center; gap:8px; cursor:pointer;
+    border:1px solid transparent; transition:background .2s ease, color .2s ease, border-color .2s ease, transform .15s ease;
+  }
+  .btn:active{transform:scale(0.97);}
+  .btn-primary{background:var(--amber); color:var(--on-amber);}
+  .btn-primary:hover{background:#FFD84D;}
+  .btn-ghost{
+    border-color:var(--glass-border); color:var(--ink); background:var(--glass);
+    backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+  }
+  .btn-ghost:hover{border-color:var(--amber-deep); background:var(--glass-strong);}
+
+  /* ---------- stat row ---------- */
+  .stat-row{
+    margin-top:64px; display:grid; grid-template-columns:repeat(4,1fr);
+    width:100%; background:var(--glass); border:1px solid var(--glass-border);
+    border-radius:20px; backdrop-filter:blur(18px) saturate(160%); -webkit-backdrop-filter:blur(18px) saturate(160%);
+    box-shadow:0 20px 50px -30px rgba(185,143,0,0.5);
+  }
+  .stat{ padding:26px 12px; text-align:center; border-left:1px solid var(--line); }
+  .stat:first-child{border-left:none;}
+  .stat .num{font-size:clamp(24px,4vw,34px); font-weight:800; color:var(--ink);}
+  .stat .label{margin-top:4px; font-size:12.5px; color:var(--muted);}
+  @media (max-width:640px){ .stat-row{grid-template-columns:repeat(2,1fr);} .stat:nth-child(3){border-left:none;} }
+
+  /* ---------- section head ---------- */
+  .section-head{text-align:center; max-width:640px; margin:0 auto 52px;}
+  .section-head h2{font-size:clamp(26px,4vw,34px); font-weight:800; margin-top:16px;}
+  .section-head p{margin-top:12px; color:var(--muted); font-size:15.5px;}
+
+  /* ---------- about ---------- */
+  #about{border-top:1px solid var(--line); border-bottom:1px solid var(--line);}
+  .about-grid{display:grid; grid-template-columns:1fr 1fr; gap:48px; align-items:start;}
+  @media (max-width:760px){ .about-grid{grid-template-columns:1fr;} }
+  .about p{font-size:16px; color:var(--muted); max-width:56ch;}
+  .about p + p{margin-top:14px;}
+  .tag-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:20px;}
+  .tag{
+    font-size:13px; font-weight:500; padding:8px 14px; border-radius:999px;
+    background:var(--glass); border:1px solid var(--glass-border); color:var(--ink);
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+  }
+  .fact-card{
+    background:var(--glass); border:1px solid var(--glass-border); border-radius:14px; padding:26px;
+    backdrop-filter:blur(18px) saturate(160%); -webkit-backdrop-filter:blur(18px) saturate(160%);
+    box-shadow:0 20px 50px -30px rgba(185,143,0,0.4);
+  }
+  .fact{display:flex; justify-content:space-between; gap:16px; padding:12px 0; border-bottom:1px solid var(--line); font-size:14.5px;}
+  .fact:last-child{border-bottom:none;}
+  .fact dt{color:var(--muted); margin:0;}
+  .fact dd{margin:0; font-weight:600; text-align:right;}
+  .fact dd a{text-decoration:none; border-bottom:1px solid var(--line-strong);}
+  .fact dd a:hover{border-color:var(--ink);}
+
+  /* ---------- experience: numbered steps ---------- */
+  .step-grid{display:grid; grid-template-columns:repeat(3,1fr); gap:28px;}
+  @media (max-width:860px){ .step-grid{grid-template-columns:1fr;} }
+  .step-card{
+    border:1px solid var(--glass-border); border-radius:16px; padding:28px 24px; background:var(--glass);
+    backdrop-filter:blur(18px) saturate(160%); -webkit-backdrop-filter:blur(18px) saturate(160%);
+    cursor:pointer; transition:border-color .2s ease, box-shadow .2s ease, background .2s ease;
+  }
+  .step-card:hover{border-color:var(--amber-deep); background:var(--glass-strong); box-shadow:0 20px 40px -22px rgba(185,143,0,0.45);}
+  .step-card:focus-visible{outline:2px solid var(--amber); outline-offset:3px;}
+  .step-num{font-family:'IBM Plex Mono', monospace; font-size:13px; color:var(--amber); font-weight:600;}
+  .step-card h3{font-size:19px; font-weight:700; margin-top:14px;}
+  .step-org{font-size:14px; color:var(--muted); margin-top:4px;}
+  .step-date{font-family:'IBM Plex Mono', monospace; font-size:12.5px; color:var(--muted); margin-top:10px;}
+  .step-body{
+    max-height:0; overflow:hidden; transition:max-height .35s ease, margin-top .35s ease; margin-top:0;
+  }
+  .step-card.open .step-body{max-height:220px; margin-top:14px;}
+  .step-body p{margin:0; font-size:14.5px; color:var(--muted); line-height:1.6;}
+  .step-toggle{font-size:12.5px; color:var(--amber); font-weight:600; margin-top:14px; display:inline-block;}
+
+  /* ---------- education ---------- */
+  .edu-grid{display:grid; grid-template-columns:1fr 1fr; gap:24px;}
+  @media (max-width:640px){ .edu-grid{grid-template-columns:1fr;} }
+  .edu-card{
+    border:1px solid var(--glass-border); border-radius:16px; padding:26px; background:var(--glass);
+    backdrop-filter:blur(18px) saturate(160%); -webkit-backdrop-filter:blur(18px) saturate(160%);
+    box-shadow:0 20px 50px -30px rgba(185,143,0,0.4);
+  }
+  .edu-card .tag-badge{
+    font-size:12px; font-weight:700; color:var(--amber); background:var(--amber-soft);
+    padding:5px 11px; border-radius:999px; display:inline-block; margin-bottom:14px;
+  }
+  .edu-card h3{font-size:19px; font-weight:700; line-height:1.3;}
+  .edu-card .place{margin-top:8px; font-size:14.5px; color:var(--muted);}
+  .edu-meta-row{display:flex; gap:18px; margin-top:16px; padding-top:16px; border-top:1px solid var(--line);}
+  .edu-meta{font-size:13px; color:var(--muted);}
+  .edu-meta b{display:block; color:var(--ink); font-size:16px; font-weight:800;}
+
+  /* ---------- skills ---------- */
+  .filter-row{display:flex; flex-wrap:wrap; gap:10px; justify-content:center; margin-bottom:36px;}
+  .filter-chip{
+    font-size:13.5px; font-weight:500; padding:9px 18px; border-radius:999px;
+    border:1px solid var(--glass-border); background:var(--glass); color:var(--muted); cursor:pointer;
+    backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
+    transition:all .2s ease;
+  }
+  .filter-chip:hover{border-color:var(--amber-deep); color:var(--ink);}
+  .filter-chip.active{background:var(--amber); border-color:var(--amber); color:var(--on-amber);}
+  .skill-grid{display:flex; flex-wrap:wrap; gap:12px; justify-content:center;}
+  .skill-pill{
+    padding:11px 20px; border-radius:999px; border:1px solid var(--glass-border);
+    background:var(--glass); font-size:14.5px; transition:opacity .2s ease, background .2s ease;
+    backdrop-filter:blur(12px); -webkit-backdrop-filter:blur(12px);
+  }
+  .skill-pill:hover{background:var(--glass-strong);}
+  .skill-pill.hidden{display:none;}
+
+  /* ---------- software / tools ---------- */
+  .software-grid{
+    display:grid; grid-template-columns:repeat(4,1fr); gap:16px;
+  }
+  @media (max-width:760px){ .software-grid{grid-template-columns:repeat(2,1fr);} }
+  .software-tile{
+    display:flex; flex-direction:column; align-items:center; gap:12px;
+    padding:26px 14px; border-radius:16px;
+    background:var(--glass); border:1px solid var(--glass-border);
+    backdrop-filter:blur(18px) saturate(160%); -webkit-backdrop-filter:blur(18px) saturate(160%);
+    transition:background .2s ease, transform .2s ease, box-shadow .2s ease;
+  }
+  .software-tile:hover{
+    background:var(--glass-strong); transform:translateY(-3px);
+    box-shadow:0 20px 40px -24px rgba(245,197,24,0.4);
+  }
+  .software-tile img{width:38px; height:38px; object-fit:contain;}
+  .software-tile span{font-size:13.5px; font-weight:500; text-align:center; color:var(--ink);}
+  .icon-badge{
+    width:44px; height:44px; border-radius:12px;
+    display:flex; align-items:center; justify-content:center;
+    font-family:'Inter', sans-serif; font-weight:700; font-size:14px;
+    border:1px solid currentColor;
+  }
+  .icon-emoji{font-size:26px; line-height:1;}
+
+  /* ---------- contact ---------- */
+  #contact{
+    position:relative; overflow:hidden; color:#fff; border-radius:28px; margin:0 20px; text-align:center;
+    background:linear-gradient(160deg, #1a1c22, #05060a 65%);
+  }
+  #contact::before{
+    content:""; position:absolute; inset:0; z-index:0;
+    background:radial-gradient(480px circle at 20% 0%, rgba(245,197,24,0.35), transparent 60%),
+               radial-gradient(420px circle at 90% 100%, rgba(245,197,24,0.2), transparent 55%);
+  }
+  #contact .wrap{max-width:640px; position:relative; z-index:1;}
+  #contact h2{font-size:clamp(30px,5vw,42px); font-weight:800; color:#fff; margin-top:18px;}
+  #contact .sub{color:rgba(255,255,255,0.65); margin-top:14px; font-size:15.5px;}
+  .contact-links{
+    display:flex; flex-direction:column; gap:0; margin-top:40px; text-align:left;
+    background:rgba(255,255,255,0.06); border:1px solid rgba(255,255,255,0.14);
+    border-radius:16px; padding:6px 22px;
+    backdrop-filter:blur(16px); -webkit-backdrop-filter:blur(16px);
+  }
+  .contact-row{
+    display:flex; align-items:center; justify-content:space-between; gap:20px;
+    padding:18px 0; border-bottom:1px solid rgba(255,255,255,0.14); font-size:15.5px;
+  }
+  .contact-row:last-child{border-bottom:none;}
+  .contact-row .label{font-family:'IBM Plex Mono', monospace; font-size:12px; color:rgba(255,255,255,0.5);}
+  .contact-row a{text-decoration:none; font-weight:600;}
+  .copy-btn{
+    font-size:12.5px; font-weight:600; background:rgba(255,255,255,0.1); border:1px solid rgba(255,255,255,0.22);
+    padding:7px 14px; border-radius:999px; cursor:pointer; color:#fff; transition:all .2s ease;
+  }
+  .copy-btn:hover{background:rgba(255,255,255,0.2);}
+  .copy-btn.copied{background:var(--amber); border-color:var(--amber); color:var(--on-amber);}
+
+  footer{
+    padding:32px 0; font-size:13px; color:var(--muted);
+    display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  }
+</style>
+</head>
+<body>
+
+<div id="progressBar"></div>
+
+<header class="nav">
+  <div class="nav-inner">
+    <div class="nav-mark"><span class="dot"></span>Ravindu Heshan</div>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#about" data-nav>About</a></li>
+      <li><a href="#experience" data-nav>Experience</a></li>
+      <li><a href="#education" data-nav>Education</a></li>
+      <li><a href="#skills" data-nav>Skills</a></li>
+      <li><a href="#software" data-nav>Software</a></li>
+      <li><a href="mailto:rheshan0007@gmail.com" class="nav-cta">Get in touch</a></li>
+    </ul>
+  </div>
+</header>
+
+<section class="hero" id="top">
+  <div class="wrap">
+    <h1>Ravindu Heshan</h1>
+    <p class="sub">Final-year Computer Science student at Edith Cowan University, Perth — with four years managing operations at one of Sri Lanka's oldest and largest printing houses before it.</p>
+    <div class="hero-cta">
+      <a href="#experience" class="btn btn-primary">View my experience</a>
+      <a href="mailto:rheshan0007@gmail.com" class="btn btn-ghost">Get in touch</a>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat"><div class="num" data-count="4">0</div><div class="label">Years in operations leadership</div></div>
+      <div class="stat"><div class="num" data-count="68.33" data-decimal="true">0</div><div class="label">Course WAM</div></div>
+      <div class="stat"><div class="num" data-count="12">0</div><div class="label">Core skills, tech to ops</div></div>
+      <div class="stat"><div class="num" data-count="2">0</div><div class="label">Countries studied in</div></div>
+    </div>
+  </div>
+</section>
+
+<section id="about">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="pill">About</span>
+      <h2>Two different educations, one way of working</h2>
+      <p>How a printing floor in Colombo and a cyber security degree in Perth ended up teaching the same lessons.</p>
+    </div>
+    <div class="about-grid">
+      <div class="about">
+        <p>I'm a final-year Bachelor of Computer Science student majoring in Cyber Security at Edith Cowan University in Perth, with earlier academic experience in Sri Lanka. I'm a quick learner who works well under deadline pressure — something I picked up long before university, running production floors where a missed handoff meant a missed delivery.</p>
+        <p>Before and alongside my studies, I spent several years in operations and people management at Art-E Printing, one of the oldest and largest printing houses in Sri Lanka — coordinating everything from customer enquiries to production schedules and board-level reporting. That background shapes how I approach technical problems: I look for the process behind the failure, not just the fix.</p>
+        <div class="tag-row">
+          <span class="tag">Cyber Security</span>
+          <span class="tag">Operations Management</span>
+          <span class="tag">Team Leadership</span>
+          <span class="tag">Customer Service</span>
+          <span class="tag">Process Coordination</span>
+        </div>
+      </div>
+      <dl class="fact-card">
+        <div class="fact"><dt>Based in</dt><dd>Perth, Western Australia</dd></div>
+        <div class="fact"><dt>Studying</dt><dd>BSc Computer Science, Cyber Security</dd></div>
+        <div class="fact"><dt>Academic standing</dt><dd>WAM 68.33 · GPA 3.00/4.00</dd></div>
+        <div class="fact"><dt>Nationality</dt><dd>Sri Lankan</dd></div>
+        <div class="fact"><dt>LinkedIn</dt><dd><a href="https://www.linkedin.com/in/ravindu-heshan-a347b42b6" target="_blank" rel="noopener">/ravindu-heshan</a></dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+<section id="experience">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="pill">Experience</span>
+      <h2>Where I've worked</h2>
+      <p>Click a card for the detail. Most of this runs alongside my degree, not before it.</p>
+    </div>
+    <div class="step-grid">
+
+      <div class="step-card" data-item tabindex="0" role="button" aria-expanded="false">
+        <span class="step-num">01</span>
+        <h3>Manager</h3>
+        <div class="step-org">Art-E Printing Private Limited</div>
+        <div class="step-date mono">Mar 2024 — Aug 2026</div>
+        <div class="step-body">
+          <p>Managed daily printing operations end to end and supervised staff to keep workflows efficient. Coordinated customer orders from first enquiry through to delivery, consistently meeting deadlines — at one of Sri Lanka's oldest and largest printing houses.</p>
+        </div>
+        <span class="step-toggle">Read more</span>
+      </div>
+
+      <div class="step-card" data-item tabindex="0" role="button" aria-expanded="false">
+        <span class="step-num">02</span>
+        <h3>Assistant Manager</h3>
+        <div class="step-org">Art-E Group</div>
+        <div class="step-date mono">Mar 2025 — Aug 2026</div>
+        <div class="step-body">
+          <p>Assisted with daily business operations and staff coordination across the group to keep workflows efficient. Supported board meetings, customer service, and administrative activities to keep operations running smoothly.</p>
+        </div>
+        <span class="step-toggle">Read more</span>
+      </div>
+
+      <div class="step-card" data-item tabindex="0" role="button" aria-expanded="false">
+        <span class="step-num">03</span>
+        <h3>Assistant Manager</h3>
+        <div class="step-org">Art-E Printing Private Limited</div>
+        <div class="step-date mono">Mar 2023 — Feb 2024</div>
+        <div class="step-body">
+          <p>Supported daily operations and helped supervise staff to maintain efficient workflows. Coordinated customer requirements and production activities to ensure orders were completed on time.</p>
+        </div>
+        <span class="step-toggle">Read more</span>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<section id="education" style="border-top:1px solid var(--line); border-bottom:1px solid var(--line);">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="pill">Education</span>
+      <h2>Where I've studied</h2>
+      <p>Two schools, two countries, one continuous run of it.</p>
+    </div>
+    <div class="edu-grid">
+      <div class="edu-card">
+        <span class="tag-badge">Final-year</span>
+        <h3>Bachelor of Computer Science — Cyber Security Major</h3>
+        <div class="place">Edith Cowan University (ECU), Perth, Western Australia</div>
+        <div class="edu-meta-row">
+          <div class="edu-meta"><b>68.33</b>Course WAM</div>
+          <div class="edu-meta"><b>3.00/4.0</b>Course GPA</div>
+        </div>
+      </div>
+      <div class="edu-card">
+        <span class="tag-badge">Secondary &amp; Primary</span>
+        <h3>Ananda College</h3>
+        <div class="place">Colombo, Sri Lanka</div>
+        <div class="edu-meta-row">
+          <div class="edu-meta"><b>Est. 1886</b>One of Sri Lanka's most established schools</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="pill">Skills</span>
+      <h2>What I bring</h2>
+      <p>Filter by category, or leave it on "All" for the full picture.</p>
+    </div>
+    <div class="filter-row" id="filterRow">
+      <button class="filter-chip active" data-filter="all">All</button>
+      <button class="filter-chip" data-filter="technical">Technical</button>
+      <button class="filter-chip" data-filter="people">People &amp; Leadership</button>
+      <button class="filter-chip" data-filter="operations">Operations</button>
+    </div>
+    <div class="skill-grid" id="skillGrid">
+      <div class="skill-pill" data-cat="technical">Technical &amp; computer skills</div>
+      <div class="skill-pill" data-cat="technical">Problem solving</div>
+      <div class="skill-pill" data-cat="technical">Creative &amp; graphic design</div>
+      <div class="skill-pill" data-cat="people">Communication &amp; interpersonal skills</div>
+      <div class="skill-pill" data-cat="people">Teamwork &amp; collaboration</div>
+      <div class="skill-pill" data-cat="people">Leadership &amp; employee motivation</div>
+      <div class="skill-pill" data-cat="people">Customer service</div>
+      <div class="skill-pill" data-cat="operations">Project coordination</div>
+      <div class="skill-pill" data-cat="operations">Time management &amp; organisation</div>
+      <div class="skill-pill" data-cat="operations">Administrative skills</div>
+      <div class="skill-pill" data-cat="people">Adaptability &amp; quick learning</div>
+      <div class="skill-pill" data-cat="people">Working across diverse environments</div>
+    </div>
+  </div>
+</section>
+
+<section id="software">
+  <div class="wrap">
+    <div class="section-head">
+      <span class="pill">Software</span>
+      <h2>Tools I use</h2>
+      <p>Creative software from the printing side, and the operating systems I work across day to day.</p>
+    </div>
+    <div class="software-grid">
+      <div class="software-tile">
+        <img src="https://www.adobe.com/cc-shared/assets/img/product-icons/svg/photoshop-40.svg" alt="Adobe Photoshop" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="icon-badge" style="display:none; background:rgba(49,168,255,0.14); color:#31A8FF;">Ps</div>
+        <span>Adobe Photoshop</span>
+      </div>
+      <div class="software-tile">
+        <img src="https://www.adobe.com/cc-shared/assets/img/product-icons/svg/illustrator-40.svg" alt="Adobe Illustrator" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="icon-badge" style="display:none; background:rgba(255,154,0,0.14); color:#FF9A00;">Ai</div>
+        <span>Adobe Illustrator</span>
+      </div>
+      <div class="software-tile">
+        <img src="https://www.adobe.com/cc-shared/assets/img/product-icons/svg/audition.svg" alt="Adobe Audition" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="icon-badge" style="display:none; background:rgba(145,99,235,0.14); color:#9163EB;">Au</div>
+        <span>Adobe Audition</span>
+      </div>
+      <div class="software-tile">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Microsoft_Office_2019_-_2024_logo.svg" alt="Microsoft Office" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+        <div class="icon-badge" style="display:none; background:rgba(216,59,1,0.14); color:#EB6A2E; font-size:12px;">Office</div>
+        <span>Microsoft Office</span>
+      </div>
+      <div class="software-tile">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Apple_logo_black.svg" alt="macOS" style="filter:invert(0.9);" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+        <span class="icon-emoji" style="display:none;">🍎</span>
+        <span>macOS</span>
+      </div>
+      <div class="software-tile">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Windows_logo_-_2021.svg" alt="Windows" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+        <span class="icon-emoji" style="display:none;">🪟</span>
+        <span>Windows</span>
+      </div>
+      <div class="software-tile">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Tux.svg" alt="Linux" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+        <span class="icon-emoji" style="display:none;">🐧</span>
+        <span>Linux</span>
+      </div>
+      <div class="software-tile">
+        <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Kali-dragon-icon.svg" alt="Kali Linux" onerror="this.style.display='none'; this.nextElementSibling.style.display='inline-block';">
+        <span class="icon-emoji" style="display:none;">🐉</span>
+        <span>Kali Linux</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="wrap">
+    <span class="pill on-dark"><span class="dot"></span>Let's talk</span>
+    <h2>Open to grad roles, internships, and conversations.</h2>
+    <p class="sub">If it touches cyber security, software, or running things well — I'd like to hear about it.</p>
+    <div class="contact-links">
+      <div class="contact-row">
+        <span class="label">EMAIL</span>
+        <a href="mailto:rheshan0007@gmail.com">rheshan0007@gmail.com</a>
+        <button class="copy-btn" data-copy="rheshan0007@gmail.com">Copy</button>
+      </div>
+      <div class="contact-row">
+        <span class="label">PHONE</span>
+        <a href="tel:+61412411073">+61 (0) 412 411 073</a>
+        <button class="copy-btn" data-copy="+61412411073">Copy</button>
+      </div>
+      <div class="contact-row">
+        <span class="label">LINKEDIN</span>
+        <a href="https://www.linkedin.com/in/ravindu-heshan-a347b42b6" target="_blank" rel="noopener">ravindu-heshan-a347b42b6</a>
+        <button class="copy-btn" data-copy="https://www.linkedin.com/in/ravindu-heshan-a347b42b6">Copy</button>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; width:100%; flex-wrap:wrap; gap:10px;">
+    <span>Ravindu Heshan · Perth, WA</span>
+    <span>Built as an interactive CV</span>
+  </div>
+</footer>
+
+<script>
+  // ---- scroll progress ----
+  const progressBar = document.getElementById('progressBar');
+  const updateProgress = () => {
+    const h = document.documentElement;
+    const scrolled = (h.scrollTop) / (h.scrollHeight - h.clientHeight) * 100;
+    progressBar.style.width = scrolled + '%';
+  };
+  document.addEventListener('scroll', updateProgress, {passive:true});
+  updateProgress();
+
+  // ---- scroll spy ----
+  const navLinks = document.querySelectorAll('#navLinks a[data-nav]');
+  const sections = ['about','experience','education','skills','software'].map(id => document.getElementById(id));
+  const spy = () => {
+    let current = sections[0].id;
+    const y = window.scrollY + window.innerHeight * 0.3;
+    sections.forEach(sec => { if(sec.offsetTop <= y) current = sec.id; });
+    navLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#'+current));
+  };
+  document.addEventListener('scroll', spy, {passive:true});
+  spy();
+
+  // ---- experience cards: click / keyboard to expand ----
+  document.querySelectorAll('[data-item]').forEach(card => {
+    const toggle = () => {
+      const isOpen = card.classList.toggle('open');
+      card.setAttribute('aria-expanded', isOpen);
+      const label = card.querySelector('.step-toggle');
+      label.textContent = isOpen ? 'Show less' : 'Read more';
+    };
+    card.addEventListener('click', toggle);
+    card.addEventListener('keydown', e => {
+      if(e.key === 'Enter' || e.key === ' '){ e.preventDefault(); toggle(); }
+    });
+  });
+
+  // ---- skill filter ----
+  const chips = document.querySelectorAll('.filter-chip');
+  const pills = document.querySelectorAll('.skill-pill');
+  chips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      chips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const f = chip.dataset.filter;
+      pills.forEach(p => {
+        p.classList.toggle('hidden', f !== 'all' && p.dataset.cat !== f);
+      });
+    });
+  });
+
+  // ---- copy buttons ----
+  document.querySelectorAll('.copy-btn').forEach(btn => {
+    btn.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(btn.dataset.copy);
+        const original = btn.textContent;
+        btn.textContent = 'Copied';
+        btn.classList.add('copied');
+        setTimeout(() => { btn.textContent = original; btn.classList.remove('copied'); }, 1600);
+      } catch(e) { /* clipboard unavailable, ignore silently */ }
+    });
+  });
+
+  // ---- animated stat count-up, triggered once when hero is visible ----
+  const statEls = document.querySelectorAll('.stat .num');
+  let statsAnimated = false;
+  const animateStats = () => {
+    if(statsAnimated) return;
+    statsAnimated = true;
+    statEls.forEach(el => {
+      const target = parseFloat(el.dataset.count);
+      const isDecimal = el.dataset.decimal === 'true';
+      const duration = 900;
+      const start = performance.now();
+      const step = now => {
+        const progress = Math.min((now - start) / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        const value = target * eased;
+        el.textContent = isDecimal ? value.toFixed(2) : Math.round(value);
+        if(progress < 1) requestAnimationFrame(step);
+      };
+      requestAnimationFrame(step);
+    });
+  };
+  const statObserver = new IntersectionObserver(entries => {
+    entries.forEach(entry => { if(entry.isIntersecting) animateStats(); });
+  }, {threshold:0.4});
+  statObserver.observe(document.querySelector('.stat-row'));
+</script>
+
+</body>
+</html>
